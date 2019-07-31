@@ -1,0 +1,29 @@
+101 001 00 742 02 =? 108
+piranni h2 0.58  101_0011074206000058034170
+BA h2 2.39   101_0011074306000239036174
+ 
+Switch on degas process by sending [P:040] with value <<1>>.
+Switch off degas process by sending [P:040] with value <<0>>.
+#### Degass on:
+   101_00110040011024159
+#### Funciona sem desligar epics, liga o degas e a leitura retornada p/ a sonda é "__LOGeIC" durante uns 3 mins, depois auto-reseta, indo de 1e-3mbar até P normal em ~1min:
+   echo -e "101_00110040011024159\r" >/dev/ttyS3
+   echo -e -n "101_00110040011024159\r" >/dev/ttyS3
+#### Degass off (3 min autooff):
+   101_00110040010023157
+ 
+101 00110040011
+ 
+101_0010074202=?108246 funciona
+in operators.h:
+#define OP_SEND_MESSAGE_TO_RS485_BUS 101
+ 
+further in process_message.h
+ 
+pgrep ISTTOK,
+    strace -fp 1113 -e trace=read  2>&1
+p/ ler processos filho à procura do PID do que lê o PIC q interessa,
+    strace -p 1113 -e trace=read  2>&1 | awk -F'"' '{gsub(/\\r\\n$/,"\n",$2);printf $2}'
+stream linhas
+    strace -p 1113 -e trace=read  2>&1 | awk -F'"' '{gsub(/\\r\\n$/,"\r",$2);printf $2}'
+overwrite
